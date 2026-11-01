@@ -187,3 +187,48 @@ CONTAINER ID   IMAGE                    COMMAND                   CREATED       
 1e80d9df4467   coding-mission-web:1.0   "/docker-entrypoint.…"   18 seconds ago   Up 17 seconds   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   coding-web
 
 8. 브라우저에서 접속한 화면: 이미지 첨부 불가
+
+9. 포트 매핑 관련:
+    PS C:\codyssey> docker run -d --name coding-web-8081 -p 8081:80 coding-mission-web:1.0
+42e104402f9b169b34f73866294b8036bcaa30db2891f669a05e94edd5ce80f6
+PS C:\codyssey> docker ps
+CONTAINER ID   IMAGE                    COMMAND                   CREATED          STATUS          PORTS                                     NAMES
+42e104402f9b   coding-mission-web:1.0   "/docker-entrypoint.…"   26 seconds ago   Up 25 seconds   0.0.0.0:8081->80/tcp, [::]:8081->80/tcp   coding-web-8081
+1e80d9df4467   coding-mission-web:1.0   "/docker-entrypoint.…"   12 minutes ago   Up 12 minutes   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   coding-web
+
+[바인드 마운트 활용]
+ 1. 컨테이너 실행 명령어:
+   PS C:\codyssey> docker run -d --name coding-web -p 8080:80 --mount "type=bind,source=$($PWD.Path)\app,target=/usr/share/nginx/html,readonly" coding-mission-web:1.0
+f6e43176be2ef93e33ab9dfe5083e795ffdeba8c6ecc522e1c737b3299371318
+
+ 3. 변경한 HTML 파일의 내용: 텍스트 변경
+    
+ 4. 변경 사항이 반영된 이유: 정확하게 모르겠음
+
+[Docker 볼륨으로 데이터 영속성 검증하기]
+1. 볼륨 생성 명령어와 결과:
+PS C:\codyssey> docker volume create mission-data
+mission-data
+
+2. 볼륨을 연결한 컨테이너 실행 명령어:
+PS C:\codyssey> docker run -d --name volume-test --mount source=mission-data,target=/data ubuntu sleep infinity
+edca5acf3f3f77e602e326e505a2e274f6643a56e40b3cdea6f2c39c4d8557ad
+
+3. 파일을 생성하고 읽은 결과:
+PS C:\codyssey> docker ps
+CONTAINER ID   IMAGE                    COMMAND                   CREATED          STATUS          PORTS                                     NAMES
+edca5acf3f3f   ubuntu                   "sleep infinity"          30 seconds ago   Up 29 seconds                                             volume-test
+f6e43176be2e   coding-mission-web:1.0   "/docker-entrypoint.…"   7 minutes ago    Up 7 minutes    0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   coding-web
+   
+4. 첫 번째 컨테이너 삭제 명령어:
+   PS C:\codyssey> docker rm -f volume-test
+volume-test
+
+6. 새 컨테이너에서 파일을 다시 읽은 결과:
+   PS C:\codyssey> docker exec volume-test2 cat /data/hello.txt
+Persistent Docker data
+PS C:\codyssey> docker rm -f volume-test2
+volume-test2
+
+7. 데이터가 유지된 이유에 대한 설명:
+   일반적인 파일 시스템이 아니라, 볼륨이 연결된 /data 경로에 저장되어서
