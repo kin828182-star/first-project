@@ -23,3 +23,43 @@ chmod 755 sample.txt
 
 검증:
 파일 권한이 644에서 755로 변경된 것을 확인했다.
+
+[git 설치 및 설정하기]
+
+실행 명령:
+PS C:\Users\Jay> git config --global user.name
+PS C:\Users\Jay> git config --global user.name "JAYYHON"
+PS C:\Users\Jay> git config --global user.email "kin828182@gmail.com"
+PS C:\Users\Jay> git config --list
+diff.astextplain.textconv=astextplain
+filter.lfs.clean=git-lfs clean -- %f
+filter.lfs.smudge=git-lfs smudge -- %f
+filter.lfs.process=git-lfs filter-process
+filter.lfs.required=true
+http.sslbackend=schannel
+core.autocrlf=true
+core.fscache=true
+core.symlinks=false
+pull.rebase=false
+credential.helper=manager
+credential.https://dev.azure.com.usehttppath=true
+init.defaultbranch=master
+user.name=JAYYHON
+user.email=kin828182@gmail.com
+
+[git 저장소 만들기]
+
+실행 명령:
+PS C:\Users\Jay> cd "$C\codyssey"
+PS C:\codyssey> git init
+Initialized empty Git repository in C:/codyssey/.git/
+PS C:\codyssey> git status
+On branch main
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        codesample.html
+
+nothing added to commit but untracked files present (use "git add" to track)
