@@ -123,10 +123,67 @@ exit
 
 [DOCKERFILE을 작성해 웹 페이지 만들기]
 
-1.Dockerfile 내용
-2.docker build 명령어와 실행 결과
-3.docker images 결과
-4. docker run 명령어와 실행 결과
-5. docker ps 결과
-6. 브라우저에서 접속한 화면
+1.Dockerfile 내용:
+PS C:\codyssey> notepad Dockerfile
+PS C:\codyssey> get-content Dockerfile
+FROM nginx:latest
 
+COPY app/index.html /usr/share/nginx/html/index.html
+
+EXPOSE 80
+
+2.docker build 명령어와 실행 결과:
+PS C:\codyssey> docker build -t coding-mission-web:1.0 .
+[+] Building 8.4s (8/8) FINISHED                                                                   docker:desktop-linux
+ => [internal] load build definition from Dockerfile                                                               0.0s
+ => => transferring dockerfile: 123B                                                                               0.0s
+ => [internal] load metadata for docker.io/library/nginx:latest                                                    2.4s
+ => [auth] library/nginx:pull token for registry-1.docker.io                                                       0.0s
+ => [internal] load .dockerignore                                                                                  0.0s
+ => => transferring context: 2B                                                                                    0.0s
+ => [internal] load build context                                                                                  0.1s
+ => => transferring context: 366B                                                                                  0.0s
+ => [1/2] FROM docker.io/library/nginx:latest@sha256:5ab5b0b01097420873a3f3330f44248e34a3c2a3e8d5ee30658aeae8cb74  3.8s
+ => => resolve docker.io/library/nginx:latest@sha256:5ab5b0b01097420873a3f3330f44248e34a3c2a3e8d5ee30658aeae8cb74  0.0s
+ => => sha256:a670537bed7086aeb8b663aad5e09cd584e19c6598cd2b6d905c5f2f2513938b 1.40kB / 1.40kB                     0.2s
+ => => sha256:d322f1bf41d8e99dc47f550cbf85e79ca18bc45db12fd1b7a8b34bf79cbd7d5a 1.21kB / 1.21kB                     0.4s
+ => => sha256:c139fe92686de21a8c49d9cb40415d1dddd95fbbee4d696cebe37693236fe6d4 404B / 404B                         0.6s
+ => => sha256:6e2ab1f3ef4e0ea3bbe1d208dfa048969199e3dab99e93c051b7c2d09c8efb3e 964B / 964B                         0.6s
+ => => sha256:9f604dae09b216f6c87919d0e59d5a4ddc4387ef071cf63c645628f93808e37b 628B / 628B                         0.4s
+ => => sha256:a071113ac575190a0fee0c046bcf51632356f07419bdffaa55798f54e5b2e23b 34.05MB / 34.05MB                   1.9s
+ => => sha256:6fc242d221a673263eabd14a9ad9584d3177c96e5cb504c891497338e2f912f5 29.86MB / 29.86MB                   1.4s
+ => => extracting sha256:6fc242d221a673263eabd14a9ad9584d3177c96e5cb504c891497338e2f912f5                          0.8s
+ => => extracting sha256:a071113ac575190a0fee0c046bcf51632356f07419bdffaa55798f54e5b2e23b                          0.6s
+ => => extracting sha256:9f604dae09b216f6c87919d0e59d5a4ddc4387ef071cf63c645628f93808e37b                          0.0s
+ => => extracting sha256:6e2ab1f3ef4e0ea3bbe1d208dfa048969199e3dab99e93c051b7c2d09c8efb3e                          0.0s
+ => => extracting sha256:c139fe92686de21a8c49d9cb40415d1dddd95fbbee4d696cebe37693236fe6d4                          0.0s
+ => => extracting sha256:d322f1bf41d8e99dc47f550cbf85e79ca18bc45db12fd1b7a8b34bf79cbd7d5a                          0.0s
+ => => extracting sha256:a670537bed7086aeb8b663aad5e09cd584e19c6598cd2b6d905c5f2f2513938b                          0.0s
+ => [2/2] COPY app/index.html /usr/share/nginx/html/index.html                                                     0.1s
+ => exporting to image                                                                                             1.8s
+ => => exporting layers                                                                                            0.1s
+ => => exporting manifest sha256:457de8294cfe873d4718c51128e306b377f69b6676d00a6201ae83dc3fa298ca                  0.0s
+ => => exporting config sha256:1f947fc378beb6b47984a5f0d3a25aa150beafba957f45561cfaa3c8b1a0c31c                    0.0s
+ => => exporting attestation manifest sha256:153fe9337334daf815ba74263257214e9e4058cc5ffe3425e04f0736f1f38478      0.0s
+ => => exporting manifest list sha256:83e730c96e63f0642b0202082b866a1cba66863d3d6e5f041b9eb73a3932ab36             0.0s
+ => => naming to docker.io/library/coding-mission-web:1.0                                                          0.0s
+ => => unpacking to docker.io/library/coding-mission-web:1.0                                                       1.5s
+ 
+3.docker images 결과:
+PS C:\codyssey> docker images
+                                                                                                   i Info →   U  In Use
+IMAGE                    ID             DISK USAGE   CONTENT SIZE   EXTRA
+coding-mission-web:1.0   83e730c96e63        241MB         63.9MB
+hello-world:latest       c567b231f656       25.9kB         9.49kB    U
+ubuntu:latest            6a06111c3b0a        163MB         45.9MB    U
+
+4. docker run 명령어와 실행 결과:
+PS C:\codyssey> docker run -d --name coding-web -p 8080:80 coding-mission-web:1.0
+1e80d9df4467ae62d1a2d15ccc669dcd8ef37b2acf1a7d98c4203817f6888fd1
+
+6. docker ps 결과:
+PS C:\codyssey> docker ps
+CONTAINER ID   IMAGE                    COMMAND                   CREATED          STATUS          PORTS                                     NAMES
+1e80d9df4467   coding-mission-web:1.0   "/docker-entrypoint.…"   18 seconds ago   Up 17 seconds   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   coding-web
+
+8. 브라우저에서 접속한 화면: 이미지 첨부 불가
